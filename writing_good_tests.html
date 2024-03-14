@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Getting Rid of Bad Tests And Writing Good Ones</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="https://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="https://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Getting Rid of Bad Tests And Writing Good Ones</h1>
+</div>
+<div id="guiding-principles" class="slide section level3">
+<h1>Guiding principles</h1>
+<p>Tests should be:</p>
+<ul>
+<li>easy to change</li>
+<li>easy to delete</li>
+<li>easy to understand</li>
+</ul>
+<p>The simple way to accomplish this is to make every test an
+<strong>isolated unit of code</strong>.</p>
+<p>In other words, you can update/refactor/delete a test without
+affecting others.</p>
+</div>
+<div id="avoid-one-test-per-context" class="slide section level3">
+<h1>Avoid one test per context</h1>
+<h4 id="bad">Bad</h4>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>describe <span class="vs">&#39;#some_method&#39;</span> <span class="cf">do</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  context <span class="vs">&#39;with this state&#39;</span> <span class="cf">do</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    it <span class="vs">&#39;does something&#39;</span> <span class="kw">...</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  context <span class="vs">&#39;with this other state&#39;</span> <span class="cf">do</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>    it <span class="vs">&#39;does something&#39;</span> <span class="kw">...</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<h4 id="why-is-it-bad">Why is it bad?</h4>
+<ul>
+<li>It’s just useless overhead</li>
+<li>The more nested the code, the harder to read</li>
+<li>Difficult to tell which let/before blocks in parent contexts affect
+each test when there’s a lot in one block</li>
+</ul>
+</div>
+<div id="avoid-one-test-per-context-1" class="slide section level3">
+<h1>Avoid one test per context</h1>
+<h4 id="good">Good</h4>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>describe <span class="vs">&#39;#some_method&#39;</span> <span class="cf">do</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  it <span class="vs">&#39;does something with this state&#39;</span> <span class="kw">...</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  it <span class="vs">&#39;does something with this other state&#39;</span> <span class="kw">...</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+</div>
+<div id="avoid-multiple-let-statements" class="slide section level3">
+<h1>Avoid multiple let statements</h1>
+<h4 id="bad-1">Bad</h4>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>describe <span class="vs">&#39;#some_method&#39;</span> <span class="cf">do</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  let(<span class="wa">:client</span>) <span class="kw">{</span> create(<span class="wa">:client</span>, <span class="wa">config: </span>config, <span class="wa">users: </span>users) <span class="kw">}</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  let(<span class="wa">:config</span>) <span class="kw">{</span> create(<span class="wa">:config</span>) <span class="kw">}</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  let(<span class="wa">:users</span>) <span class="kw">{</span> create_list(<span class="wa">:user</span>, <span class="dv">3</span>, <span class="wa">purchase: </span>purchase) <span class="kw">}</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  let(<span class="wa">:purchase</span>) <span class="kw">{</span> create(<span class="wa">:purchase</span>) <span class="kw">}</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="kw">...</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<h4 id="why-is-it-bad-1">Why is it bad?</h4>
+<ul>
+<li>Hard to read; it doesn’t always read top-to-bottom</li>
+<li>Hard to know the end result of the state</li>
+</ul>
+</div>
+<div id="avoid-multiple-let-statements-1" class="slide section level3">
+<h1>Avoid multiple let statements</h1>
+<h4 id="good-1---use-a-base-case">Good #1 - Use a Base Case</h4>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>describe <span class="vs">&#39;#some_method&#39;</span> <span class="cf">do</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="co"># All the setup is now hidden in factories/client.rb</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  let(<span class="wa">:client</span>) <span class="kw">{</span> create(<span class="wa">:client</span>) <span class="kw">}</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="co"># Anything that needs to &quot;change&quot; for the test goes right in the test itself</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  it <span class="st">&quot;works with multiple users&quot;</span> <span class="cf">do</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    client<span class="at">.users</span> <span class="kw">=</span> create_list(<span class="wa">:users</span>, <span class="dv">3</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="kw">...</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<p>Think of your <code>let</code> as a base case for its tests.</p>
+<p>It exposes what the <em>differences</em> are between each test.</p>
+<p>Leverage your factories – make the base the “most valid” state.</p>
+</div>
+<div id="avoid-multiple-let-statements-2" class="slide section level3">
+<h1>Avoid multiple let statements</h1>
+<h4 id="good-2---base-case-for-controller-tests">Good #2 - Base case for
+controller tests</h4>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>let(<span class="wa">:valid_params</span>) <span class="cf">do</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="kw">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="wa">user: </span><span class="st">&quot;Andrew&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="wa">vibe: </span><span class="st">&quot;Super Chill&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="kw">}</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>it <span class="st">&quot;only lets cool vibes in&quot;</span> <span class="cf">do</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  expect(entry_with(valid_params)<span class="at">.allowed</span>)<span class="at">.eq</span> (<span class="dv">true</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>it <span class="st">&quot;keeps the bad vibes out&quot;</span> <span class="cf">do</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  bad_vibes_params <span class="kw">=</span> valid_params<span class="at">.merge</span>(<span class="wa">vibe: </span><span class="st">&quot;High-Strung AF&quot;</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>  expect(entry_with(bad_vibes_params)<span class="at">.allowed</span>)<span class="at">.eq</span> (<span class="dv">false</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+</div>
+<div id="duplicate-and-inline-state-as-a-default"
+class="slide section level3">
+<h1>Duplicate and Inline state as a default</h1>
+<h4 id="bad-2">Bad</h4>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>describe <span class="vs">&#39;#some_method&#39;</span> <span class="cf">do</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  let(<span class="wa">:config</span>) <span class="kw">{</span> create(<span class="wa">:config</span>) <span class="kw">}</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  let(<span class="wa">:purchase</span>) <span class="kw">{</span> create(<span class="wa">:purchase</span>) <span class="kw">}</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  let(<span class="wa">:users</span>) <span class="kw">{</span> create_list(<span class="wa">:user</span>, <span class="dv">3</span>, <span class="wa">purchase: </span>purchase) <span class="kw">}</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  let(<span class="wa">:client</span>) <span class="kw">{</span> create(<span class="wa">:client</span>, <span class="wa">config: </span>config, <span class="wa">users: </span>users) <span class="kw">}</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  it <span class="vs">&#39;tests this thing&#39;</span> <span class="cf">do</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    <span class="kw">...</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  it <span class="vs">&#39;tests this other thing&#39;</span> <span class="cf">do</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    <span class="co"># Assuming more state setup</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>    <span class="kw">...</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+</div>
+<div id="duplicate-and-inline-state-as-a-default-1"
+class="slide section level3">
+<h1>Duplicate and Inline state as a default</h1>
+<h4 id="why-is-it-bad-2">Why is it bad?</h4>
+<ul>
+<li>Tests depend on each other’s state; which it makes it tough to
+change</li>
+<li>Refactoring tests can be done fearlessly; don’t need to update state
+to generalize across all tests</li>
+</ul>
+</div>
+<div id="duplicate-and-inline-state-as-a-default-2"
+class="slide section level3">
+<h1>Duplicate and Inline state as a default</h1>
+<h4 id="good-1">Good</h4>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>describe <span class="vs">&#39;#some_method&#39;</span> <span class="cf">do</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  it <span class="vs">&#39;tests this thing&#39;</span> <span class="cf">do</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    config <span class="kw">=</span> create(<span class="wa">:config</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>    purchase <span class="kw">=</span> create(<span class="wa">:purchase</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>    users <span class="kw">=</span> create_list(<span class="wa">:user</span>, <span class="dv">3</span>, <span class="wa">purchase: </span>purchase)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    client <span class="kw">=</span> create(<span class="wa">:client</span>, <span class="wa">config: </span>config, <span class="wa">users: </span>users)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>    <span class="kw">...</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  it <span class="vs">&#39;tests this other thing&#39;</span> <span class="cf">do</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>    config <span class="kw">=</span> create(<span class="wa">:config</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>    purchase <span class="kw">=</span> create(<span class="wa">:purchase</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>    users <span class="kw">=</span> create_list(<span class="wa">:user</span>, <span class="dv">3</span>, <span class="wa">purchase: </span>purchase)</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>    client <span class="kw">=</span> create(<span class="wa">:client</span>, <span class="wa">config: </span>config, <span class="wa">users: </span>users)</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>    <span class="co"># Assuming more state setup</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>    <span class="kw">...</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<h4 id="tradeoffs">Tradeoffs:</h4>
+<ul>
+<li>Certain changes cause many tests to need updating.</li>
+</ul>
+</div>
+<div id="using-too-many-mocksstubs" class="slide section level3">
+<h1>Using too many mocks/stubs</h1>
+<h4 id="bad-3">Bad</h4>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Method</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="cf">def</span> some_method</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  something_really_complicated <span class="kw">&amp;&amp;</span> something_also_complicated</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co"># Test</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>describe <span class="vs">&#39;#some_method&#39;</span> <span class="cf">do</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  it <span class="vs">&#39;tests the things&#39;</span> <span class="cf">do</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>    stub(<span class="wa">:something_really_complicated</span>)<span class="at">.to</span> eq(<span class="dv">true</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>    stub(<span class="wa">:something_also_complicated</span>)<span class="at">.to</span> eq(<span class="dv">true</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>    expect(some_method)<span class="at">.to</span> eq(<span class="dv">true</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+</div>
+<div id="using-too-many-mocksstubs-1" class="slide section level3">
+<h1>Using too many mocks/stubs</h1>
+<h4 id="why-is-it-bad-3">Why is it bad?</h4>
+<ul>
+<li>Bad for coverage</li>
+<li>You’re potentially testing a scenario that won’t happen in the real
+world</li>
+<li>Could be hiding actual errors by stubbing out the code it happens
+in</li>
+<li>You need to try and rebuild the state that the stub might have
+created from scratch, which can also change over time.</li>
+</ul>
+</div>
+<div id="using-too-many-mocksstubs-2" class="slide section level3">
+<h1>Using too many mocks/stubs</h1>
+<h4 id="good-1-remove-stubs">Good #1 – Remove stubs</h4>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>describe <span class="vs">&#39;#some_method&#39;</span> <span class="cf">do</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  it <span class="vs">&#39;tests the things&#39;</span> <span class="cf">do</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="co"># Set up state to make your tests true</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    expect(some_method)<span class="at">.to</span> eq(<span class="dv">true</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+</div>
+<div id="using-too-many-mocksstubs-3" class="slide section level3">
+<h1>Using too many mocks/stubs</h1>
+<h4 id="good-2-stubbing-services">Good #2 – Stubbing services</h4>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>describe <span class="vs">&#39;#some_method&#39;</span> <span class="cf">do</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  it <span class="vs">&#39;tests the things&#39;</span> <span class="cf">do</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    expect(<span class="dt">LoanAllocator</span>)<span class="at">.to</span> receive(<span class="wa">:allocate</span>) <span class="kw">{</span> <span class="dv">true</span> <span class="kw">}</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>    expect(some_method)<span class="at">.to</span> eq(<span class="dv">true</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<p>Instead, save mocks and stubs for “Services”. That might be some sort
+of black box of code internally in the app or a third party API.</p>
+<p>In system tests, you should still err on the side of stubbing
+nothing. Consider VCR for stubbing third party APIs.</p>
+</div>
+<div id="writing-tests-that-are-redundant" class="slide section level3">
+<h1>Writing tests that are redundant</h1>
+<h4 id="bad-4">Bad</h4>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="cf">def</span> overlapping?(other)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="dv">self</span><span class="at">.position</span> <span class="kw">==</span> other<span class="at">.position</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co"># This test is useless</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>it <span class="vs">&#39;is overlapping the other one&#39;</span> <span class="cf">do</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  model <span class="kw">=</span> create(<span class="wa">:model</span>, <span class="wa">position: </span><span class="dv">100</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>  other <span class="kw">=</span> create(<span class="wa">:model</span>, <span class="wa">position: </span><span class="dv">100</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  expect(model<span class="at">.overlapping?</span>(other))<span class="at">.to</span> eq(<span class="dv">true</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<h4 id="why-is-it-bad-4">Why is it bad?</h4>
+<ul>
+<li>You’re testing parts of the application that have nothing to do with
+business logic</li>
+<li>These parts are inherent to the language/framework and are already
+heavily tested</li>
+</ul>
+</div>
+<div id="writing-tests-that-are-redundant-1"
+class="slide section level3">
+<h1>Writing tests that are redundant</h1>
+<h4 id="good-2">Good</h4>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># No test at all</span></span></code></pre></div>
+<p>Just delete the test!</p>
+</div>
+<div id="read-this-page-if-you-have-time" class="slide section level3">
+<h1>Read this page if you have time</h1>
+<p>https://abseil.io/resources/swe-book/html/ch12.html</p>
+</div>
+<div class="slide section level3">
+
+<div class="float">
+<img src="snl-david-pumpkins.jpg" alt="Any Questions?" />
+<div class="figcaption">Any Questions?</div>
+</div>
+</div>
+</body>
+</html>
