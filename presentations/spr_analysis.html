@@ -35,12 +35,19 @@
 </div>
 <div id="problem" class="slide section level3">
 <h1>Problem</h1>
-<p>Difficult to keep track of dependant pull requests</p>
+<p>I want to do a bunch of pre-work/refactors to solve my current task
+but it’s difficult</p>
 <h4 id="why-is-it-difficult">Why is it Difficult</h4>
 <ul>
+<li>If I do all the work in one PR it’s way too much to review at once
+for the reviewer</li>
+<li>When I split it up into multiple PRs:
+<ul>
 <li>Lots of manual Jira and Github processes</li>
-<li>Just tough to keep it all in your head</li>
-<li>Ensuring that each dependent PR is up-to-date</li>
+<li>Tough to keep the state of every PR all in your head, even with
+Github &amp; Jira</li>
+<li>Need to ensure that each dependent PR is up-to-date</li>
+</ul></li>
 </ul>
 </div>
 <div id="solution" class="slide section level3">
@@ -49,11 +56,17 @@
 <h4 id="what-are-stacked-prs">What are Stacked PRs</h4>
 <p>It’s a paradigm for working with a bunch of pull requests that depend
 on each other</p>
-<p>Read this: https://www.michaelagreiler.com/stacked-pull-requests/</p>
+<p><a href="https://www.michaelagreiler.com/stacked-pull-requests/">Read
+this blog post</a></p>
 </div>
 <div id="what-are-stacked-prs-1" class="slide section level3">
 <h1>What are Stacked PRs</h1>
-<p><img src="stacked_prs.png" /></p>
+<div class="float">
+<img src="stacked_prs.png"
+alt="Credit: https://www.michaelagreiler.com/stacked-pull-requests/" />
+<div class="figcaption">Credit:
+https://www.michaelagreiler.com/stacked-pull-requests/</div>
+</div>
 </div>
 <div id="using-it-on-centah" class="slide section level3">
 <h1>Using it on Centah</h1>
@@ -84,11 +97,28 @@ required.</li>
 <li><a href="https://graphite.dev">Graphite.dev</a></li>
 <li><a href="https://github.com/ejoffe/spr">git-spr</a></li>
 </ul>
-<p>Ended up picking git-spr because Graphite.dev is paid, GUI, and I’m
-not sure if it will work with my flow.</p>
+</div>
+<div id="graphite.dev" class="slide section level3">
+<h1>Graphite.dev</h1>
+<ul>
+<li>Paid</li>
+<li>GUI</li>
+<li>Not quite sure how well it works with our process</li>
+<li>Not quite sure how well it works with MY process</li>
+</ul>
 </div>
 <div id="git-spr" class="slide section level3">
 <h1>git-spr</h1>
+<ul>
+<li>Open-source</li>
+<li>CLI</li>
+<li>Not quite sure how well it works with our process</li>
+<li>Seems to work with MY process pretty well</li>
+</ul>
+<p>So I ended up picking git-spr to tryout</p>
+</div>
+<div id="how-git-spr-works" class="slide section level3">
+<h1>How git-spr works</h1>
 <p>README walkthrough…</p>
 </div>
 <div id="git-spr-analysis" class="slide section level3">
@@ -113,38 +143,53 @@ href="https://github.com/ejoffe/spr/pull/405">which I did…</a>)</li>
 <li>Makes weird, non-changeable branch names like spr/master/f02d0fa5
 <ul>
 <li>Didn’t work with our Jira Ticket Release Queue check</li>
-<li>I also fixed this so the check now also checks the first commit of a
-PR</li>
+<li>I also fixed this so this check now also reads the first commit of a
+PR for a ticket number</li>
 </ul></li>
-<li>Not a lot of uptake</li>
+<li>Not a whole lot of uptake
+<ul>
+<li>Could be abandoned at any moment</li>
+</ul></li>
 </ul>
 </div>
 <div id="git-spr-analysis-2" class="slide section level3">
 <h1>git-spr Analysis</h1>
 <h4 id="the-bad-parts">The bad parts</h4>
 <ul>
-<li>Our updated master requirement on branches completely breaks the
-flow</li>
 <li>Need a new approval after every change
 <ul>
-<li>Still a problem…</li>
+<li>Prevents collapsing branches and then finally merging into
+master</li>
+<li>Could possible workaround with a bottom-up merge approach but our
+updated master requirement gets in the way</li>
 </ul></li>
-<li>Still pressing buttons in Jira</li>
-<li>Haven’t found an adequate tool to accomodate it</li>
+<li>Still pressing buttons in Jira
+<ul>
+<li>I wish we didn’t need Jira tickets for <em>every</em> PR</li>
+</ul></li>
 <li>Only one commit per PR
 <ul>
 <li>Probably the worst part</li>
-<li>Reviewers hate me</li>
+<li>Reviewers hate me because, if you need to make changes to a PR
+within the stack, you NEED to squash and reviewers don’t know what you
+changed.</li>
 </ul></li>
 </ul>
 </div>
 <div id="conclusion" class="slide section level3">
 <h1>Conclusion</h1>
 <ul>
-<li>I still love the idea of stacked PRs</li>
-<li>Our process is difficult with stacked PRs, right now</li>
-<li>If I ever make a fork of git-spr that allows for multiple commits
-per PR it might be usable</li>
+<li>I still love the idea of stacked PRs since it works well with my
+programming workflow.</li>
+<li>Our process is difficult with stacked PRs, right now
+<ul>
+<li>Once again, I wish we didn’t need Jira tickets for <em>every</em>
+PR.</li>
+<li>QA environments are based on ticket name, not branch name. Not sure
+how it would work with multiple branches with same ticket.</li>
+</ul></li>
+<li>git-spr needs to be updated to allow for multiple commits per
+PR</li>
 </ul>
 </div>
 <div class="slide section level3">
