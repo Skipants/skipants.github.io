@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Tool Analysis: SPR</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="https://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="https://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Tool Analysis: SPR</h1>
+</div>
+<div id="problem" class="slide section level3">
+<h1>Problem</h1>
+<p>Difficult to keep track of dependant pull requests</p>
+<h4 id="why-is-it-difficult">Why is it Difficult</h4>
+<ul>
+<li>Lots of manual Jira and Github processes</li>
+<li>Just tough to keep it all in your head</li>
+<li>Ensuring that each dependent PR is up-to-date</li>
+</ul>
+</div>
+<div id="solution" class="slide section level3">
+<h1>Solution</h1>
+<p>Stacked PRs</p>
+<h4 id="what-are-stacked-prs">What are Stacked PRs</h4>
+<p>It’s a paradigm for working with a bunch of pull requests that depend
+on each other</p>
+<p>Read this: https://www.michaelagreiler.com/stacked-pull-requests/</p>
+</div>
+<div id="what-are-stacked-prs-1" class="slide section level3">
+<h1>What are Stacked PRs</h1>
+<p><img src="stacked_prs.png" /></p>
+</div>
+<div id="using-it-on-centah" class="slide section level3">
+<h1>Using it on Centah</h1>
+<p>There’s some difficulties with doing this on Centah right now:</p>
+<ul>
+<li>Need a new approval after every change
+<ul>
+<li>After merging a PR down into its parent, a new approval is
+required.</li>
+<li>Ideally every PR is approved already and merged at once</li>
+</ul></li>
+<li>Jira Ticket Requirement
+<ul>
+<li>PRs aren’t green until in Release Queue</li>
+</ul></li>
+<li>Manually have to update every child PR
+<ul>
+<li>Rebase</li>
+<li>Updating base merge branches</li>
+</ul></li>
+<li>In general, Github does not facilitate stacking PRs that well</li>
+</ul>
+</div>
+<div id="stacked-pr-tools" class="slide section level3">
+<h1>Stacked PR tools</h1>
+<p>Looking for a tool to help with all these issues. Found two:</p>
+<ul>
+<li><a href="https://graphite.dev">Graphite.dev</a></li>
+<li><a href="https://github.com/ejoffe/spr">git-spr</a></li>
+</ul>
+<p>Ended up picking git-spr because Graphite.dev is paid, GUI, and I’m
+not sure if it will work with my flow.</p>
+</div>
+<div id="git-spr" class="slide section level3">
+<h1>git-spr</h1>
+<p>README walkthrough…</p>
+</div>
+<div id="git-spr-analysis" class="slide section level3">
+<h1>git-spr Analysis</h1>
+<h4 id="the-good-parts">The good parts</h4>
+<ul>
+<li>I like CLIs</li>
+<li>Very simple interface</li>
+<li>Very concise information</li>
+<li>Did all the Github button pushing for me</li>
+</ul>
+</div>
+<div id="git-spr-analysis-1" class="slide section level3">
+<h1>git-spr Analysis</h1>
+<h4 id="the-meh-parts">The meh parts</h4>
+<ul>
+<li>Open-source by one dev
+<ul>
+<li>Low bus-factor, but you can fork it and fix issues (<a
+href="https://github.com/ejoffe/spr/pull/405">which I did…</a>)</li>
+</ul></li>
+<li>Makes weird, non-changeable branch names like spr/master/f02d0fa5
+<ul>
+<li>Didn’t work with our Jira Ticket Release Queue check</li>
+<li>I also fixed this so the check now also checks the first commit of a
+PR</li>
+</ul></li>
+<li>Not a lot of uptake</li>
+</ul>
+</div>
+<div id="git-spr-analysis-2" class="slide section level3">
+<h1>git-spr Analysis</h1>
+<h4 id="the-bad-parts">The bad parts</h4>
+<ul>
+<li>Our updated master requirement on branches completely breaks the
+flow</li>
+<li>Need a new approval after every change
+<ul>
+<li>Still a problem…</li>
+</ul></li>
+<li>Still pressing buttons in Jira</li>
+<li>Haven’t found an adequate tool to accomodate it</li>
+<li>Only one commit per PR
+<ul>
+<li>Probably the worst part</li>
+<li>Reviewers hate me</li>
+</ul></li>
+</ul>
+</div>
+<div id="conclusion" class="slide section level3">
+<h1>Conclusion</h1>
+<ul>
+<li>I still love the idea of stacked PRs</li>
+<li>Our process is difficult with stacked PRs, right now</li>
+<li>If I ever make a fork of git-spr that allows for multiple commits
+per PR it might be usable</li>
+</ul>
+</div>
+<div class="slide section level3">
+
+<div class="float">
+<img src="snl-david-pumpkins.jpg" alt="Any Questions?" />
+<div class="figcaption">Any Questions?</div>
+</div>
+</div>
+</body>
+</html>
