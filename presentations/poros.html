@@ -100,15 +100,15 @@
 <div id="about-me" class="slide section level3">
 <h1>About Me</h1>
 </div>
-<div id="these-slides" class="slide section level3">
-<h1>These Slides</h1>
-<p>Available on my Github pages:
-skipants.github.io/presentations/poros.html</p>
-</div>
 <div class="slide section level3">
 
 <p>Financeit is hiring a Senior Mobile Dev (Hybrid iOS/Android)</p>
 <p>https://www.financeit.io/careers-apply-today-financeit/</p>
+</div>
+<div id="these-slides" class="slide section level3">
+<h1>These Slides</h1>
+<p>Available on my Github pages:
+skipants.github.io/presentations/poros.html</p>
 </div>
 <div id="what-are-poros" class="slide section level3">
 <h1>What are POROs?</h1>
@@ -189,7 +189,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="
 <h4 id="why">Why</h4>
 <ul>
 <li>Easy to pass this data around</li>
-<li>Unrelated parts of the code that use this data don’t need to
+<li>Unrelated parts of the code that use this data do not need to
 understand its internals
 <ul>
 <li>Especially when the data comes from different sources</li>
@@ -209,14 +209,15 @@ models</li>
 <li>I like to just put these in <code>/app/models</code> even though
 they aren’t DB backed
 <ul>
-<li>If you or your team don’t like that, use <code>/app/values/</code>
-instead.</li>
+<li>If you or your team does not like that, use
+<code>/app/values/</code> instead.</li>
 </ul></li>
 <li>Try and keep these pure</li>
 <li>Use class methods as constructors to handle different sources of the
 data</li>
 <li>Use public methods as representations of the data</li>
-<li>Use with Rails::Aggregations#composed_of to get huge ergonomic gains
+<li>Use with <code>Rails::Aggregations#composed_of</code> to get huge
+ergonomic gains
 <ul>
 <li>https://thoughtbot.com/blog/rails-value-objects</li>
 </ul></li>
@@ -302,7 +303,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="
 <span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>      <span class="wa">:on_hold</span></span>
 <span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    order <span class="kw">=</span> <span class="dt">Order</span><span class="at">.create</span>(<span class="wa">order_status: </span>order_status)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    order <span class="kw">=</span> <span class="dt">Order</span><span class="at">.create</span>(<span class="wa">order_status: </span>order_status, <span class="wa">items: </span>order_form<span class="at">.items</span>, <span class="wa">user: </span>current_user)</span>
 <span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a></span>
 <span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    <span class="kw">[</span><span class="wa">:ok</span>, order<span class="kw">]</span></span>
 <span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>  <span class="cf">end</span></span>
@@ -396,33 +397,27 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="cf">return</span> available_items <span class="cf">unless</span> user<span class="at">.premium_subscriber?</span></span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="cf">if</span> available_items<span class="at">.count</span> <span class="kw">&lt;</span> item_ids<span class="at">.length</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>      <span class="dt">Item</span><span class="at">.where</span>(<span class="wa">id: </span>item_ids)<span class="at">.joins</span>(<span class="wa">:shipping_manifest</span>)<span class="at">.where</span>(<span class="st">&quot;shipping_manifests.receive_date &lt; ?&quot;</span>, <span class="dv">2</span><span class="at">.weeks.from_now</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>    <span class="cf">else</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>      available_items</span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
-<table style="width:6%;">
-<colgroup>
-<col width="5%" />
-</colgroup>
-<tbody>
-<tr>
-<td>### Queries</td>
-</tr>
-<tr>
-<td>#### Why</td>
-</tr>
-<tr>
-<td>- Give you room to break out of an ORM to do logic in code or in SQL
-- Since all pure SQL lives in one place, you know where to look before
-DB upgrades or transitions - Optimizing queries become easier because
-you can easily test the boundaries</td>
-</tr>
-</tbody>
-</table>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>      <span class="dt">Item</span><span class="at">.where</span>(<span class="wa">id: </span>item_ids)<span class="at">.joins</span>(<span class="wa">:shipping_manifest</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>          <span class="at">.where</span>(<span class="st">&quot;shipping_manifests.receive_date &lt; ?&quot;</span>, <span class="dv">2</span><span class="at">.weeks.from_now</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>      available_items</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
 <div id="queries-2" class="slide section level3">
+<h1>Queries</h1>
+<h4 id="why-4">Why</h4>
+<ul>
+<li>Give you room to break out of an ORM to do logic in code or in
+SQL</li>
+<li>Since all pure SQL lives in one place, you know where to look before
+DB upgrades or transitions</li>
+<li>Optimizing queries become easier because you can easily test the
+boundaries</li>
+</ul>
+</div>
+<div id="queries-3" class="slide section level3">
 <h1>Queries</h1>
 <h4 id="notes-on-usage-3">Notes on Usage</h4>
 <ul>
@@ -443,8 +438,12 @@ the query result</li>
 controllers AND models skinny.</p>
 <p>Your Rails controllers now only care about routing traffic and
 returning responses</p>
-<p>Your models now only represent the data contained in their table</p>
+<p>Your Rails models now only represent the data contained in their
+table</p>
 <p>Both have their complexity completely reduced</p>
+</div>
+<div class="slide section level3">
+
 <div class="float">
 <img src="snl-david-pumpkins.jpg" alt="Any Questions?" />
 <div class="figcaption">Any Questions?</div>
