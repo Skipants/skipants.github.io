@@ -97,23 +97,46 @@
 <div class="slide titlepage">
   <h1 class="title">POROs That Make Your Rails App Soar-os</h1>
 </div>
-<div class="slide section level3">
-
-<p>About me</p>
+<div id="about-me" class="slide section level3">
+<h1>About Me</h1>
+</div>
+<div id="these-slides" class="slide section level3">
+<h1>These Slides</h1>
+<p>Available on my Github pages:
+skipants.github.io/presentations/poros.html</p>
 </div>
 <div class="slide section level3">
 
 <p>Financeit is hiring a Senior Mobile Dev (Hybrid iOS/Android)</p>
+<p>https://www.financeit.io/careers-apply-today-financeit/</p>
 </div>
-<div id="poro" class="slide section level3">
-<h1>PORO</h1>
-<p>Plain Old Ruby Object</p>
+<div id="what-are-poros" class="slide section level3">
+<h1>What are POROs?</h1>
+<p><strong>Plain Old Ruby Object</strong></p>
+<p>POROs are just objects that do something very simple without any
+extra functionality.</p>
+<p>By having different categories of POROs, we can have nice
+<strong>conventional abstractions</strong> that help groups of
+developers understand how code is logically separated within an
+application.</p>
 </div>
 <div id="why-poros" class="slide section level3">
 <h1>Why POROs?</h1>
-<p><strong>“Programs must be written for people to read, and only
-incidentally for machines to execute.” — Harold Abelson</strong></p>
-<p>POROs are conventions POROs are abstractions</p>
+<p><em>“Programs must be written for people to read, and only
+incidentally for machines to execute.”</em> — Harold Abelson</p>
+<p>Because these are <strong>conventional abstractions</strong> once you
+understand how a category of POROs works you can easily understand
+extrapolate their use to other parts of your application.</p>
+</div>
+<div id="conventional-abstractions" class="slide section level3">
+<h1>Conventional Abstractions</h1>
+<p>Therefore, this: - saves time understanding code - reduces mental
+overhead - helps guide where new code should go</p>
+</div>
+<div id="conventional-abstractions-1" class="slide section level3">
+<h1>Conventional Abstractions</h1>
+<p>POROs have a side effect that they are self-contained pieces of code,
+so changing them is a lot easier than coupled code as well.</p>
 </div>
 <div id="poros-ill-show-you" class="slide section level3">
 <h1>POROs I’ll Show You</h1>
@@ -125,33 +148,12 @@ incidentally for machines to execute.” — Harold Abelson</strong></p>
 <li>Queries</li>
 </ul>
 </div>
-<div id="rules-for-poros" class="slide section level3">
-<h1>Rules for POROs</h1>
-<ul>
-<li>Don’t insert code that doesn’t belong</li>
-<li>Avoid inheritance, including Module inclusion with includes</li>
-<li>Treat them as leaves of complexity</li>
-</ul>
-</div>
-<div id="rules-for-poros-1" class="slide section level3">
-<h1>Rules for POROs</h1>
-<p>But break these rules when it makes sense!</p>
-</div>
-<div id="our-rails-app-to-refactor" class="slide section level3">
-<h1>Our Rails App To Refactor</h1>
-<p>Quick Overview</p>
-<p>Let’s try and refactor this app with our POROs</p>
-</div>
 <div id="models" class="slide section level3">
 <h1>Models</h1>
-<h4 id="what-do-they-do">What do they do</h4>
-<ul>
-<li>Couple data into an easy to understand representation of that
-data</li>
-<li>Make it easy to pass that data around</li>
-<li>Make it easy to reuse that data in different parts of code</li>
-<li>Make it easy to transform date from a single source of truth</li>
-</ul>
+<h4 id="what">What</h4>
+<p>PORO that contains domain-specific data and exposes different
+representations of that data.</p>
+<p>AKA Value Objects</p>
 </div>
 <div id="models-1" class="slide section level3">
 <h1>Models</h1>
@@ -170,72 +172,142 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="
 <span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>    new(params<span class="kw">[</span><span class="st">&quot;number&quot;</span><span class="kw">]</span>, params<span class="kw">[</span><span class="st">&quot;cvv&quot;</span><span class="kw">]</span>, expiration_date)</span>
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>  <span class="cf">def</span> is_visa?</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>  <span class="cf">def</span> visa?</span>
 <span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>    number<span class="at">.starts_with?</span>(<span class="st">&quot;4&quot;</span>)</span>
 <span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>  <span class="cf">def</span> is_mastercard?</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>  <span class="cf">def</span> mastercard?</span>
 <span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>    number<span class="at">.starts_with?</span>(<span class="st">&quot;5&quot;</span>)</span>
 <span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
 <div id="models-2" class="slide section level3">
 <h1>Models</h1>
+<h4 id="why">Why</h4>
+<ul>
+<li>Easy to pass this data around</li>
+<li>Unrelated parts of the code that use this data don’t need to
+understand its internals</li>
+<li>Especially when the data comes from different sources</li>
+<li>Helps break out this functionality that usually ends up in
+models</li>
+<li>Adding new representations of this data is simply a new method</li>
+<li>eg. What would <code>expired?</code> look like in our example?</li>
+</ul>
+</div>
+<div id="models-3" class="slide section level3">
+<h1>Models</h1>
+<h4 id="notes-on-usage">Notes on Usage</h4>
 <ul>
 <li>I like to just put these in <code>/app/models</code> even though
 they aren’t DB backed</li>
+<li>If you or your team don’t like that, use <code>/app/values/</code>
+instead.</li>
 <li>Try and keep these pure</li>
-<li>Use class methods as constructors</li>
+<li>Use class methods as constructors to handle different sources of the
+data</li>
 <li>Use public methods as representations of the data</li>
-<li>AKA Value Objects</li>
+<li>Use with Rails::Aggregations#composed_of to get huge ergonomic
+gains</li>
+<li>https://thoughtbot.com/blog/rails-value-objects</li>
 </ul>
 </div>
 <div id="forms" class="slide section level3">
 <h1>Forms</h1>
-<h4 id="what-do-they-do-1">What do they do</h4>
-<ul>
-<li>Parameter validation</li>
-<li>Parameter data sanitizing</li>
-<li>Turning parameters into useful objects</li>
-</ul>
+<h4 id="what-1">What</h4>
+<p>PORO for that takes data input from a third-party and: 1. validates
+the data 2. transforms it so that it’s easier for your app code to
+use</p>
+<p>AKA <code>Parameters</code> or <code>Inputs</code></p>
 </div>
 <div id="forms-1" class="slide section level3">
 <h1>Forms</h1>
 <div class="sourceCode" id="cb2"><pre
-class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>  <span class="fu">puts</span> <span class="st">&quot;hey&quot;</span></span></code></pre></div>
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="dt">CreateOrderForm</span> <span class="kw">=</span> <span class="dt">Struct</span><span class="at">.new</span>(<span class="wa">:params</span>) <span class="cf">do</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="fu">include</span> <span class="dt">ActiveModel</span><span class="kw">::</span><span class="dt">Validations</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  validates <span class="wa">:age</span>, <span class="wa">numericality: </span><span class="kw">{</span> <span class="wa">greater_than_or_equal_to: </span><span class="dv">18</span> <span class="kw">}</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="cf">def</span> items</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="ot">@items</span> <span class="kw">||=</span> <span class="dt">Item</span><span class="at">.where</span>(<span class="wa">id: </span>params<span class="kw">[</span><span class="st">&quot;itemIds&quot;</span><span class="kw">]</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="cf">def</span> age</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    params<span class="kw">[</span><span class="st">&quot;age&quot;</span><span class="kw">]</span><span class="at">.to_i</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="cf">def</span> agrees_to_terms?</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    params<span class="kw">[</span><span class="st">&quot;tos_agree&quot;</span><span class="kw">]</span> <span class="kw">==</span> <span class="st">&quot;1&quot;</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>  <span class="cf">def</span> credit_card</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    <span class="ot">@credit_card</span> <span class="kw">||=</span> <span class="dt">CreditCard</span><span class="at">.from_params</span>(params<span class="kw">[</span><span class="st">&quot;creditCard&quot;</span><span class="kw">]</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
 <div id="forms-2" class="slide section level3">
 <h1>Forms</h1>
+<h4 id="why-1">Why</h4>
 <ul>
-<li>You may have heard about these before, but my use case is
+<li>Helps handle small annoyances with cleaning data</li>
+<li>eg. Rails form checkbox sending “0” or “1” to the backend</li>
+<li>Validates data before you do any sort of processing with it</li>
+<li>Rest of application can be guaranteed that the data is of a certain
+format without extra checks</li>
+</ul>
+</div>
+<div id="forms-3" class="slide section level3">
+<h1>Forms</h1>
+<h4 id="usage-notes">Usage Notes</h4>
+<ul>
+<li>You may have heard about these before, but this use case is
 simpler</li>
-<li>Try and keep these pure too</li>
-<li>Other names could be <code>Parameters</code>,
-<code>Inputs</code></li>
-<li>Consider using <code>include ActiveModel::Validations</code> in
-Forms to get a nice validation convention for free</li>
+<li>Try and keep these pure</li>
+<li>Use models to abstract complex data</li>
+<li>Consider validating against the model, too!</li>
 </ul>
 </div>
 <div id="services" class="slide section level3">
 <h1>Services</h1>
-<h4 id="what-do-they-do-2">What do they do</h4>
-<ul>
-<li>A generic place for complicated business logic</li>
-<li>Helps keeps controllers and models from exploding in size</li>
-<li>Isolates complexity</li>
-<li>Help business logic become composable</li>
-<li>Makes up for Ruby’s lax module loading system</li>
-</ul>
+<h4 id="what-2">What</h4>
+<p>Generic POROs that provide a layer of business logic between
+controllers and models</p>
 </div>
 <div id="services-1" class="slide section level3">
 <h1>Services</h1>
-<p>Refactor Example</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="cf">class</span> <span class="dt">CreateOrder</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.call</span>(order_form, current_user)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">[</span><span class="wa">:invalid</span>, order_form<span class="at">.errors</span><span class="kw">]</span> <span class="cf">unless</span> order_form<span class="at">.valid?</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    order_status <span class="cf">= if</span> order_form<span class="at">.agrees_to_terms?</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>      <span class="dt">FillOrder</span><span class="at">.call</span>(current_user)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>      <span class="wa">:processed</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>      <span class="dt">HoldOrder</span><span class="at">.call</span>(current_user)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>      <span class="wa">:on_hold</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    order <span class="kw">=</span> <span class="dt">Order</span><span class="at">.create</span>(<span class="wa">order_status: </span>order_status)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    <span class="kw">[</span><span class="wa">:ok</span>, order<span class="kw">]</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
 <div id="services-2" class="slide section level3">
 <h1>Services</h1>
+<h4 id="why-2">Why</h4>
 <ul>
-<li>Services are going to be an entrypoint into a lot of other code.
-They are nodes of complexity; not leaves.</li>
+<li>Helps keeps controllers and models from exploding in size</li>
+<li>Isolates complexity</li>
+<li>Help business logic become composable</li>
+</ul>
+</div>
+<div id="services-3" class="slide section level3">
+<h1>Services</h1>
+<h4 id="notes-on-usage-1">Notes on Usage</h4>
+<ul>
+<li>Services are going to be an entrypoint into a lot of other code</li>
 <li>Expect these classes to get a little hairy with a lot of business
 logic</li>
 <li>Use the other POROs to whittle down at this complexity</li>
@@ -243,40 +315,107 @@ logic</li>
 </div>
 <div id="connections" class="slide section level3">
 <h1>Connections</h1>
-<h4 id="what-do-they-do-3">What do they do</h4>
-<ul>
-<li>Provide an interface for a third party API</li>
-<li>Transform an API’s calls into methods that encapsulate <em>your</em>
-application’s logic</li>
-<li>Give a convention for how devs should make remote requests</li>
-</ul>
+<h4 id="what-3">What</h4>
+<p>Provide an adapter between an API and your business logic</p>
 </div>
 <div id="connections-1" class="slide section level3">
 <h1>Connections</h1>
-<p>Refactor Example</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="cf">class</span> <span class="dt">CreditCardInc</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.pre_authed?</span>(credit_card)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    params <span class="kw">=</span> <span class="kw">{</span> <span class="st">&quot;no&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.cvv</span> <span class="kw">}</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    response <span class="kw">=</span> conn<span class="at">.post</span>(<span class="st">&quot;https://example.com/credit_card/preauth&quot;</span>, <span class="wa">json: </span>params)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    response<span class="at">.status</span> <span class="kw">==</span> <span class="dv">200</span> <span class="kw">&amp;&amp;</span> <span class="cn">JSON</span><span class="at">.parse</span>(response<span class="at">.body</span>)<span class="kw">[</span><span class="wa">:status</span><span class="kw">]</span> <span class="kw">==</span> <span class="st">&quot;ok&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.charge</span>(credit_card, user)</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    params <span class="kw">=</span> <span class="kw">{</span> <span class="st">&quot;no&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.cvv</span>, <span class="st">&quot;postalCode&quot;</span> <span class="kw">=&gt;</span> user<span class="at">.postal_code</span> <span class="kw">}</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    response <span class="kw">=</span> conn<span class="at">.post</span>(<span class="st">&quot;https://example.com/credit_card/charge&quot;</span>, <span class="wa">json: </span>params)</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    <span class="dt">Charge</span><span class="at">.from_api_response</span>(response)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.conn</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>    <span class="cn">HTTPX</span><span class="at">.with</span>(<span class="wa">headers: </span><span class="kw">{</span> <span class="st">&quot;authorization&quot;</span> <span class="kw">=&gt;</span> <span class="st">&quot;Bearer b7d03a6947b217efb6f3ec3bd3504582&quot;</span> <span class="kw">}</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
 <div id="connections-2" class="slide section level3">
 <h1>Connections</h1>
+<h4 id="why-3">Why</h4>
+<ul>
+<li>Isolates extra code used to transform responses from APIs to
+something your application cares about</li>
+<li>Give a convention for how devs should make remote requests</li>
+<li>Delineates remote requests from the rest of your app logic</li>
+<li>As a bonus, you can easily stub all Connection methods to avoid
+requests in your test suite</li>
+</ul>
+</div>
+<div id="connections-3" class="slide section level3">
+<h1>Connections</h1>
+<h4 id="notes-on-usage-2">Notes on Usage</h4>
 <ul>
 <li>Use a <code>Connection</code> superclass to abstract out request
 generalities</li>
+<li>eg. Normalize timeouts, circuit breaker implementations across many
+API requests</li>
 <li>Also a useful abstraction outside of Rails</li>
 </ul>
 </div>
 <div id="queries" class="slide section level3">
 <h1>Queries</h1>
-<h4 id="what-do-they-do-4">What do they do</h4>
-<ul>
-<li>Encapsulate complicated database queries</li>
-<li>Give you room to break out of an ORM to do logic in code or in
-SQL</li>
-<li>Since all pure SQL lives in one place, you know where to look before
-DB upgrades or transitions</li>
-</ul>
+<h4 id="what-4">What</h4>
+<p>Encapsulations of complicated database queries, including control
+flow</p>
 </div>
 <div id="queries-1" class="slide section level3">
 <h1>Queries</h1>
-<p>Refactor Example</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="cf">class</span> <span class="dt">AvailableItemsQuery</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.call</span>(item_ids, user)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    available_items <span class="kw">=</span> <span class="dt">Item</span><span class="at">.join</span>(<span class="wa">:inventories</span>)<span class="at">.where</span>(<span class="wa">id: </span>item_ids)<span class="at">.where</span>(<span class="st">&quot;items.quantity &gt; 0&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="cf">return</span> available_items <span class="cf">unless</span> user<span class="at">.premium_subscriber?</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="cf">if</span> available_items<span class="at">.count</span> <span class="kw">&lt;</span> item_ids<span class="at">.length</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>      <span class="dt">Item</span><span class="at">.where</span>(<span class="wa">id: </span>item_ids)<span class="at">.joins</span>(<span class="wa">:shipping_manifest</span>)<span class="at">.where</span>(<span class="st">&quot;shipping_manifests.receive_date &lt; ?&quot;</span>, <span class="dv">2</span><span class="at">.weeks.from_now</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>      available_items</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<table style="width:6%;">
+<colgroup>
+<col width="5%" />
+</colgroup>
+<tbody>
+<tr>
+<td>### Queries</td>
+</tr>
+<tr>
+<td>#### Why</td>
+</tr>
+<tr>
+<td>- Give you room to break out of an ORM to do logic in code or in SQL
+- Since all pure SQL lives in one place, you know where to look before
+DB upgrades or transitions - Optimizing queries become easier because
+you can easily test the boundaries</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="queries-2" class="slide section level3">
+<h1>Queries</h1>
+<h4 id="notes-on-usage-3">Notes on Usage</h4>
+<ul>
+<li>Use queries as read-only so that they are pure methods</li>
+<li>move write queries to services</li>
+<li>or make write queries explicit in some way</li>
+<li>Consider a Query superclass or testing abstraction that can
+instrument your queries and help debug performance issues</li>
+<li>Return ActiveRecord::Relations so that you can continue to chain off
+the query result</li>
+</ul>
 </div>
 <div class="slide section level3">
 
