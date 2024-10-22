@@ -130,8 +130,11 @@ extrapolate their use to other parts of your application.</p>
 </div>
 <div id="conventional-abstractions" class="slide section level3">
 <h1>Conventional Abstractions</h1>
-<p>Therefore, this: - saves time understanding code - reduces mental
-overhead - helps guide where new code should go</p>
+<ul>
+<li>Saves time understanding code</li>
+<li>Reduces mental overhead</li>
+<li>Helps guide where new code should go</li>
+</ul>
 </div>
 <div id="conventional-abstractions-1" class="slide section level3">
 <h1>Conventional Abstractions</h1>
@@ -187,12 +190,16 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="
 <ul>
 <li>Easy to pass this data around</li>
 <li>Unrelated parts of the code that use this data don’t need to
-understand its internals</li>
+understand its internals
+<ul>
 <li>Especially when the data comes from different sources</li>
+</ul></li>
 <li>Helps break out this functionality that usually ends up in
 models</li>
-<li>Adding new representations of this data is simply a new method</li>
+<li>Adding new representations of this data is simply a new method
+<ul>
 <li>eg. What would <code>expired?</code> look like in our example?</li>
+</ul></li>
 </ul>
 </div>
 <div id="models-3" class="slide section level3">
@@ -200,16 +207,19 @@ models</li>
 <h4 id="notes-on-usage">Notes on Usage</h4>
 <ul>
 <li>I like to just put these in <code>/app/models</code> even though
-they aren’t DB backed</li>
+they aren’t DB backed
+<ul>
 <li>If you or your team don’t like that, use <code>/app/values/</code>
 instead.</li>
+</ul></li>
 <li>Try and keep these pure</li>
 <li>Use class methods as constructors to handle different sources of the
 data</li>
 <li>Use public methods as representations of the data</li>
-<li>Use with Rails::Aggregations#composed_of to get huge ergonomic
-gains</li>
+<li>Use with Rails::Aggregations#composed_of to get huge ergonomic gains
+<ul>
 <li>https://thoughtbot.com/blog/rails-value-objects</li>
+</ul></li>
 </ul>
 </div>
 <div id="forms" class="slide section level3">
@@ -249,8 +259,10 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="
 <h1>Forms</h1>
 <h4 id="why-1">Why</h4>
 <ul>
-<li>Helps handle small annoyances with cleaning data</li>
+<li>Helps handle small annoyances with cleaning data
+<ul>
 <li>eg. Rails form checkbox sending “0” or “1” to the backend</li>
+</ul></li>
 <li>Validates data before you do any sort of processing with it</li>
 <li>Rest of application can be guaranteed that the data is of a certain
 format without extra checks</li>
@@ -263,8 +275,10 @@ format without extra checks</li>
 <li>You may have heard about these before, but this use case is
 simpler</li>
 <li>Try and keep these pure</li>
-<li>Use models to abstract complex data</li>
+<li>Use models to abstract complex data
+<ul>
 <li>Consider validating against the model, too!</li>
+</ul></li>
 </ul>
 </div>
 <div id="services" class="slide section level3">
@@ -346,9 +360,11 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="
 <li>Isolates extra code used to transform responses from APIs to
 something your application cares about</li>
 <li>Give a convention for how devs should make remote requests</li>
-<li>Delineates remote requests from the rest of your app logic</li>
+<li>Delineates remote requests from the rest of your app logic
+<ul>
 <li>As a bonus, you can easily stub all Connection methods to avoid
 requests in your test suite</li>
+</ul></li>
 </ul>
 </div>
 <div id="connections-3" class="slide section level3">
@@ -356,9 +372,11 @@ requests in your test suite</li>
 <h4 id="notes-on-usage-2">Notes on Usage</h4>
 <ul>
 <li>Use a <code>Connection</code> superclass to abstract out request
-generalities</li>
+generalities
+<ul>
 <li>eg. Normalize timeouts, circuit breaker implementations across many
 API requests</li>
+</ul></li>
 <li>Also a useful abstraction outside of Rails</li>
 </ul>
 </div>
@@ -408,17 +426,25 @@ you can easily test the boundaries</td>
 <h1>Queries</h1>
 <h4 id="notes-on-usage-3">Notes on Usage</h4>
 <ul>
-<li>Use queries as read-only so that they are pure methods</li>
+<li>Use queries as read-only so that they are pure methods
+<ul>
 <li>move write queries to services</li>
 <li>or make write queries explicit in some way</li>
+</ul></li>
 <li>Consider a Query superclass or testing abstraction that can
 instrument your queries and help debug performance issues</li>
 <li>Return ActiveRecord::Relations so that you can continue to chain off
 the query result</li>
 </ul>
 </div>
-<div class="slide section level3">
-
+<div id="summary" class="slide section level3">
+<h1>Summary</h1>
+<p>You’ll find combining all these objects together you’ll keep your
+controllers AND models skinny.</p>
+<p>Your Rails controllers now only care about routing traffic and
+returning responses</p>
+<p>Your models now only represent the data contained in their table</p>
+<p>Both have their complexity completely reduced</p>
 <div class="float">
 <img src="snl-david-pumpkins.jpg" alt="Any Questions?" />
 <div class="figcaption">Any Questions?</div>
