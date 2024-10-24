@@ -112,6 +112,9 @@ skipants.github.io/presentations/poros.html</p>
 </div>
 <div id="what-are-poros" class="slide section level3">
 <h1>What are POROs?</h1>
+</div>
+<div id="what-are-poros-1" class="slide section level3">
+<h1>What are POROs?</h1>
 <p><strong>Plain Old Ruby Object</strong></p>
 <p>POROs are just objects that do something very simple without any
 extra functionality.</p>
@@ -122,6 +125,9 @@ application.</p>
 </div>
 <div id="why-poros" class="slide section level3">
 <h1>Why POROs?</h1>
+</div>
+<div id="why-poros-1" class="slide section level3">
+<h1>Why POROs?</h1>
 <p><em>“Programs must be written for people to read, and only
 incidentally for machines to execute.”</em> — Harold Abelson</p>
 <p>Because these are <strong>conventional abstractions</strong> once you
@@ -130,13 +136,16 @@ extrapolate their use to other parts of your application.</p>
 </div>
 <div id="conventional-abstractions" class="slide section level3">
 <h1>Conventional Abstractions</h1>
+</div>
+<div id="conventional-abstractions-1" class="slide section level3">
+<h1>Conventional Abstractions</h1>
 <ul>
 <li>Saves time understanding code</li>
 <li>Reduces mental overhead</li>
 <li>Helps guide where new code should go</li>
 </ul>
 </div>
-<div id="conventional-abstractions-1" class="slide section level3">
+<div id="conventional-abstractions-2" class="slide section level3">
 <h1>Conventional Abstractions</h1>
 <p>POROs have a side effect that they are self-contained pieces of code,
 so changing them is a lot easier than coupled code as well.</p>
@@ -153,12 +162,15 @@ so changing them is a lot easier than coupled code as well.</p>
 </div>
 <div id="models" class="slide section level3">
 <h1>Models</h1>
+</div>
+<div id="models-1" class="slide section level3">
+<h1>Models</h1>
 <h4 id="what">What</h4>
 <p>PORO that contains domain-specific data and exposes different
 representations of that data.</p>
 <p>AKA Value Objects</p>
 </div>
-<div id="models-1" class="slide section level3">
+<div id="models-2" class="slide section level3">
 <h1>Models</h1>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="dt">CreditCard</span> <span class="kw">=</span> <span class="dt">Struct</span><span class="at">.new</span>(<span class="wa">:number</span>, <span class="wa">:cvv</span>, <span class="wa">:expiration_date</span>) <span class="cf">do</span></span>
@@ -184,7 +196,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="
 <span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
-<div id="models-2" class="slide section level3">
+<div id="models-3" class="slide section level3">
 <h1>Models</h1>
 <h4 id="why">Why</h4>
 <ul>
@@ -202,7 +214,7 @@ models</li>
 </ul></li>
 </ul>
 </div>
-<div id="models-3" class="slide section level3">
+<div id="models-4" class="slide section level3">
 <h1>Models</h1>
 <h4 id="notes-on-usage">Notes on Usage</h4>
 <ul>
@@ -225,6 +237,9 @@ ergonomic gains
 </div>
 <div id="forms" class="slide section level3">
 <h1>Forms</h1>
+</div>
+<div id="forms-1" class="slide section level3">
+<h1>Forms</h1>
 <h4 id="what-1">What</h4>
 <p>PORO that takes data input from a third-party and:</p>
 <ol style="list-style-type: decimal">
@@ -233,7 +248,7 @@ ergonomic gains
 </ol>
 <p>AKA <code>Parameters</code> or <code>Inputs</code></p>
 </div>
-<div id="forms-1" class="slide section level3">
+<div id="forms-2" class="slide section level3">
 <h1>Forms</h1>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="dt">CreateOrderForm</span> <span class="kw">=</span> <span class="dt">Struct</span><span class="at">.new</span>(<span class="wa">:params</span>) <span class="cf">do</span></span>
@@ -258,7 +273,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="
 <span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
-<div id="forms-2" class="slide section level3">
+<div id="forms-3" class="slide section level3">
 <h1>Forms</h1>
 <h4 id="why-1">Why</h4>
 <ul>
@@ -271,7 +286,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="
 format without extra checks</li>
 </ul>
 </div>
-<div id="forms-3" class="slide section level3">
+<div id="forms-4" class="slide section level3">
 <h1>Forms</h1>
 <h4 id="usage-notes">Usage Notes</h4>
 <ul>
@@ -286,11 +301,14 @@ simpler</li>
 </div>
 <div id="services" class="slide section level3">
 <h1>Services</h1>
+</div>
+<div id="services-1" class="slide section level3">
+<h1>Services</h1>
 <h4 id="what-2">What</h4>
 <p>Generic POROs that provide a layer of business logic between
 controllers and models</p>
 </div>
-<div id="services-1" class="slide section level3">
+<div id="services-2" class="slide section level3">
 <h1>Services</h1>
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="cf">class</span> <span class="dt">CreateOrder</span></span>
@@ -311,7 +329,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="
 <span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
-<div id="services-2" class="slide section level3">
+<div id="services-3" class="slide section level3">
 <h1>Services</h1>
 <h4 id="why-2">Why</h4>
 <ul>
@@ -320,7 +338,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="
 <li>Help business logic become composable</li>
 </ul>
 </div>
-<div id="services-3" class="slide section level3">
+<div id="services-4" class="slide section level3">
 <h1>Services</h1>
 <h4 id="notes-on-usage-1">Notes on Usage</h4>
 <ul>
@@ -332,31 +350,35 @@ logic</li>
 </div>
 <div id="connections" class="slide section level3">
 <h1>Connections</h1>
+</div>
+<div id="connections-1" class="slide section level3">
+<h1>Connections</h1>
 <h4 id="what-3">What</h4>
 <p>Provide an adapter between an API and your business logic</p>
 </div>
-<div id="connections-1" class="slide section level3">
+<div id="connections-2" class="slide section level3">
 <h1>Connections</h1>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="cf">class</span> <span class="dt">CreditCardInc</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.pre_authed?</span>(credit_card)</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    params <span class="kw">=</span> <span class="kw">{</span> <span class="st">&quot;no&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.cvv</span> <span class="kw">}</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    response <span class="kw">=</span> conn<span class="at">.post</span>(<span class="st">&quot;https://example.com/credit_card/preauth&quot;</span>, <span class="wa">json: </span>params)</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    response<span class="at">.status</span> <span class="kw">==</span> <span class="dv">200</span> <span class="kw">&amp;&amp;</span> <span class="cn">JSON</span><span class="at">.parse</span>(response<span class="at">.body</span>)<span class="kw">[</span><span class="wa">:status</span><span class="kw">]</span> <span class="kw">==</span> <span class="st">&quot;ok&quot;</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.charge</span>(credit_card, user)</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    params <span class="kw">=</span> <span class="kw">{</span> <span class="st">&quot;no&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.cvv</span>, <span class="st">&quot;postalCode&quot;</span> <span class="kw">=&gt;</span> user<span class="at">.postal_code</span> <span class="kw">}</span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    response <span class="kw">=</span> conn<span class="at">.post</span>(<span class="st">&quot;https://example.com/credit_card/charge&quot;</span>, <span class="wa">json: </span>params)</span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    <span class="dt">Charge</span><span class="at">.from_api_response</span>(response)</span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.conn</span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>    <span class="cn">HTTPX</span><span class="at">.with</span>(<span class="wa">headers: </span><span class="kw">{</span> <span class="st">&quot;authorization&quot;</span> <span class="kw">=&gt;</span> <span class="st">&quot;Bearer b7d03a6947b217efb6f3ec3bd3504582&quot;</span> <span class="kw">}</span>)</span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    response <span class="kw">=</span> conn<span class="at">.pot</span>(<span class="st">&quot;https://example.com/credit_card/preauth&quot;</span>, <span class="wa">json: </span>params)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    response<span class="at">.status</span> <span class="kw">==</span> <span class="dv">200</span> <span class="kw">&amp;&amp;</span> <span class="cn">JSON</span><span class="at">.parse</span>(response<span class="at">.body</span>)<span class="kw">[</span><span class="wa">:status</span><span class="kw">]</span> <span class="kw">==</span> <span class="st">&quot;ok&quot;</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.charge</span>(credit_card, user)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    params <span class="kw">=</span> <span class="kw">{</span> <span class="st">&quot;no&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.cvv</span>, <span class="st">&quot;postalCode&quot;</span> <span class="kw">=&gt;</span> user<span class="at">.postal_code</span> <span class="kw">}</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    response <span class="kw">=</span> conn<span class="at">.post</span>(<span class="st">&quot;https://example.com/credit_card/charge&quot;</span>, <span class="wa">json: </span>params)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    <span class="dt">Charge</span><span class="at">.from_api_response</span>(response)</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.conn</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>    <span class="cn">HTTPX</span><span class="at">.with</span>(<span class="wa">headers: </span><span class="kw">{</span> <span class="st">&quot;authorization&quot;</span> <span class="kw">=&gt;</span> <span class="st">&quot;Bearer b7d03a6947b217efb6f3ec3bd3504582&quot;</span> <span class="kw">}</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
-<div id="connections-2" class="slide section level3">
+<div id="connections-3" class="slide section level3">
 <h1>Connections</h1>
 <h4 id="why-3">Why</h4>
 <ul>
@@ -370,7 +392,7 @@ requests in your test suite</li>
 </ul></li>
 </ul>
 </div>
-<div id="connections-3" class="slide section level3">
+<div id="connections-4" class="slide section level3">
 <h1>Connections</h1>
 <h4 id="notes-on-usage-2">Notes on Usage</h4>
 <ul>
@@ -380,16 +402,20 @@ generalities
 <li>eg. Normalize timeouts, circuit breaker implementations across many
 API requests</li>
 </ul></li>
+<li>Don’t be afraid to call the same endpoint in different methods</li>
 <li>Also a useful abstraction outside of Rails</li>
 </ul>
 </div>
 <div id="queries" class="slide section level3">
 <h1>Queries</h1>
+</div>
+<div id="queries-1" class="slide section level3">
+<h1>Queries</h1>
 <h4 id="what-4">What</h4>
 <p>Encapsulations of complicated database queries, including control
 flow</p>
 </div>
-<div id="queries-1" class="slide section level3">
+<div id="queries-2" class="slide section level3">
 <h1>Queries</h1>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="cf">class</span> <span class="dt">AvailableItemsQuery</span></span>
@@ -407,7 +433,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="
 <span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
-<div id="queries-2" class="slide section level3">
+<div id="queries-3" class="slide section level3">
 <h1>Queries</h1>
 <h4 id="why-4">Why</h4>
 <ul>
@@ -419,7 +445,7 @@ DB upgrades or transitions</li>
 boundaries</li>
 </ul>
 </div>
-<div id="queries-3" class="slide section level3">
+<div id="queries-4" class="slide section level3">
 <h1>Queries</h1>
 <h4 id="notes-on-usage-3">Notes on Usage</h4>
 <ul>
@@ -434,10 +460,13 @@ instrument your queries and help debug performance issues</li>
 the query result</li>
 </ul>
 </div>
+<div id="big-picture-example-if-time" class="slide section level3">
+<h1>Big Picture Example (if time)</h1>
+</div>
 <div id="summary" class="slide section level3">
 <h1>Summary</h1>
-<p>You’ll find combining all these objects together you’ll keep your
-controllers AND models skinny.</p>
+<p>Combining all of these POROs keeps your controllers AND models
+skinny.</p>
 <p>Your Rails controllers now only care about routing traffic and
 returning responses</p>
 <p>Your Rails models now only represent the data contained in their
