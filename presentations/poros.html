@@ -360,23 +360,24 @@ logic</li>
 <h1>Connections</h1>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="cf">class</span> <span class="dt">CreditCardInc</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.pre_authed?</span>(credit_card)</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    params <span class="kw">=</span> <span class="kw">{</span> <span class="st">&quot;no&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.cvv</span> <span class="kw">}</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    response <span class="kw">=</span> conn<span class="at">.pot</span>(<span class="st">&quot;https://example.com/credit_card/preauth&quot;</span>, <span class="wa">json: </span>params)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.pre_authed?</span>(credit_card, amount)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    params <span class="kw">=</span> <span class="kw">{</span> <span class="st">&quot;no&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.cvv</span>, <span class="st">&quot;cost&quot;</span> <span class="kw">=&gt;</span> amount <span class="kw">}</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    response <span class="kw">=</span> conn<span class="at">.post</span>(<span class="st">&quot;https://example.com/credit_card/preauth&quot;</span>, <span class="wa">json: </span>params)</span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    response<span class="at">.status</span> <span class="kw">==</span> <span class="dv">200</span> <span class="kw">&amp;&amp;</span> <span class="cn">JSON</span><span class="at">.parse</span>(response<span class="at">.body</span>)<span class="kw">[</span><span class="wa">:status</span><span class="kw">]</span> <span class="kw">==</span> <span class="st">&quot;ok&quot;</span></span>
 <span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.charge</span>(credit_card, user)</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    params <span class="kw">=</span> <span class="kw">{</span> <span class="st">&quot;no&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.cvv</span>, <span class="st">&quot;postalCode&quot;</span> <span class="kw">=&gt;</span> user<span class="at">.postal_code</span> <span class="kw">}</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.charge</span>(credit_card, user, amount)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    params <span class="kw">=</span> <span class="kw">{</span> <span class="st">&quot;no&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.cvv</span>, <span class="st">&quot;postalCode&quot;</span> <span class="kw">=&gt;</span> user<span class="at">.postal_code</span>, <span class="st">&quot;cost&quot;</span> <span class="kw">=&gt;</span> amount <span class="kw">}</span></span>
 <span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    response <span class="kw">=</span> conn<span class="at">.post</span>(<span class="st">&quot;https://example.com/credit_card/charge&quot;</span>, <span class="wa">json: </span>params)</span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    <span class="dt">Charge</span><span class="at">.from_api_response</span>(response)</span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.conn</span></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>    <span class="cn">HTTPX</span><span class="at">.with</span>(<span class="wa">headers: </span><span class="kw">{</span> <span class="st">&quot;authorization&quot;</span> <span class="kw">=&gt;</span> <span class="st">&quot;Bearer b7d03a6947b217efb6f3ec3bd3504582&quot;</span> <span class="kw">}</span>)</span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>  <span class="cf">end</span></span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="dt">Charge</span><span class="at">.from_api_response</span>(response)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.conn</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>    <span class="cn">HTTPX</span><span class="at">.with</span>(<span class="wa">headers: </span><span class="kw">{</span> <span class="st">&quot;authorization&quot;</span> <span class="kw">=&gt;</span> <span class="st">&quot;Bearer b7d03a6947b217efb6f3ec3bd3504582&quot;</span> <span class="kw">}</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
 <div id="connections-3" class="slide section level3">
 <h1>Connections</h1>
@@ -387,6 +388,7 @@ something your application cares about</li>
 <li>Give a convention for how devs should make remote requests</li>
 <li>Delineates remote requests from the rest of your app logic
 <ul>
+<li>Reduce the blast radius of complex APIs</li>
 <li>As a bonus, you can easily stub all Connection methods to avoid
 requests in your test suite</li>
 </ul></li>
