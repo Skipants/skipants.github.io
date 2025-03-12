@@ -24,8 +24,9 @@
     }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -36,7 +37,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -109,7 +110,7 @@
 <h1>These Slides</h1>
 <p>Available on my Github pages:
 skipants.github.io/presentations/poros.html</p>
-<p><img src="poros_qr_code.png" /></p>
+<p><img src="img/poros_qr_code.png" /></p>
 </div>
 <div id="what-are-poros" class="slide section level3">
 <h1>What are POROs?</h1>
@@ -176,7 +177,7 @@ representations of that data.</p>
 <div id="models-2" class="slide section level3">
 <h1>Models</h1>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="dt">CreditCard</span> <span class="kw">=</span> <span class="dt">Struct</span><span class="at">.new</span>(<span class="wa">:number</span>, <span class="wa">:cvv</span>, <span class="wa">:expiration_date</span>) <span class="cf">do</span></span>
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="dt">CreditCard</span> <span class="op">=</span> <span class="dt">Struct</span><span class="at">.new</span>(<span class="wa">:number</span>, <span class="wa">:cvv</span>, <span class="wa">:expiration_date</span>) <span class="cf">do</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="co"># Assume parameters from the client of the form:</span></span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="co">#   &quot;creditCard&quot;: {</span></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="co">#     &quot;number&quot;: &quot;9999-9999-9999-9999&quot;,</span></span>
@@ -185,7 +186,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="co">#     &quot;expYear&quot;: 27,</span></span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="co">#   }</span></span>
 <span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.from_params</span>(params)</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>    expiration_date <span class="kw">=</span> <span class="dt">Date</span><span class="at">.new</span>(params<span class="kw">[</span><span class="st">&quot;expYear&quot;</span><span class="kw">]</span> <span class="kw">+</span> <span class="dv">2000</span>, params<span class="kw">[</span><span class="st">&quot;expMonth&quot;</span><span class="kw">]</span>, <span class="dv">1</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>    expiration_date <span class="op">=</span> <span class="dt">Date</span><span class="at">.new</span>(params<span class="kw">[</span><span class="st">&quot;expYear&quot;</span><span class="kw">]</span> <span class="op">+</span> <span class="dv">2000</span>, params<span class="kw">[</span><span class="st">&quot;expMonth&quot;</span><span class="kw">]</span>, <span class="dv">1</span>)</span>
 <span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a></span>
 <span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>    new(params<span class="kw">[</span><span class="st">&quot;number&quot;</span><span class="kw">]</span>, params<span class="kw">[</span><span class="st">&quot;cvv&quot;</span><span class="kw">]</span>, expiration_date)</span>
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  <span class="cf">end</span></span>
@@ -254,13 +255,13 @@ ergonomic gains
 <div id="forms-2" class="slide section level3">
 <h1>Forms</h1>
 <div class="sourceCode" id="cb2"><pre
-class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="dt">CreateOrderForm</span> <span class="kw">=</span> <span class="dt">Struct</span><span class="at">.new</span>(<span class="wa">:params</span>) <span class="cf">do</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="fu">include</span> <span class="dt">ActiveModel</span><span class="kw">::</span><span class="dt">Validations</span></span>
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="dt">CreateOrderForm</span> <span class="op">=</span> <span class="dt">Struct</span><span class="at">.new</span>(<span class="wa">:params</span>) <span class="cf">do</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="fu">include</span> <span class="dt">ActiveModel</span><span class="op">:</span><span class="wa">:Validations</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  validates <span class="wa">:age</span>, <span class="wa">numericality: </span><span class="kw">{</span> <span class="wa">greater_than_or_equal_to: </span><span class="dv">18</span> <span class="kw">}</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  validates <span class="wa">:age</span>, <span class="wa">numericality:</span> <span class="op">{</span> <span class="wa">greater_than_or_equal_to:</span> <span class="dv">18</span> <span class="op">}</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="cf">def</span> items</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="ot">@items</span> <span class="kw">||=</span> <span class="dt">Item</span><span class="at">.where</span>(<span class="wa">id: </span>params<span class="kw">[</span><span class="st">&quot;itemIds&quot;</span><span class="kw">]</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="ot">@items</span> <span class="op">||=</span> <span class="dt">Item</span><span class="at">.where</span>(<span class="wa">id:</span> params<span class="kw">[</span><span class="st">&quot;itemIds&quot;</span><span class="kw">]</span>)</span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a></span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="cf">def</span> age</span>
@@ -268,11 +269,11 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="
 <span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a></span>
 <span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="cf">def</span> agrees_to_terms?</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    params<span class="kw">[</span><span class="st">&quot;tos_agree&quot;</span><span class="kw">]</span> <span class="kw">==</span> <span class="st">&quot;1&quot;</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    params<span class="kw">[</span><span class="st">&quot;tos_agree&quot;</span><span class="kw">]</span> <span class="op">==</span> <span class="st">&quot;1&quot;</span></span>
 <span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a></span>
 <span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>  <span class="cf">def</span> credit_card</span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    <span class="ot">@credit_card</span> <span class="kw">||=</span> <span class="dt">CreditCard</span><span class="at">.from_params</span>(params<span class="kw">[</span><span class="st">&quot;creditCard&quot;</span><span class="kw">]</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    <span class="ot">@credit_card</span> <span class="op">||=</span> <span class="dt">CreditCard</span><span class="at">.from_params</span>(params<span class="kw">[</span><span class="st">&quot;creditCard&quot;</span><span class="kw">]</span>)</span>
 <span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
@@ -318,7 +319,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.call</span>(order_form, current_user)</span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">[</span><span class="wa">:invalid</span>, order_form<span class="at">.errors</span><span class="kw">]</span> <span class="cf">unless</span> order_form<span class="at">.valid?</span></span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    order_status <span class="cf">= if</span> order_form<span class="at">.agrees_to_terms?</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    order_status <span class="op">=</span> <span class="cf">if</span> order_form<span class="at">.agrees_to_terms?</span></span>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>      <span class="dt">FillOrder</span><span class="at">.call</span>(current_user)</span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>      <span class="wa">:processed</span></span>
 <span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    <span class="cf">else</span></span>
@@ -326,7 +327,7 @@ class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb3-1"><a href="
 <span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>      <span class="wa">:on_hold</span></span>
 <span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    <span class="cf">end</span></span>
 <span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    order <span class="kw">=</span> <span class="dt">Order</span><span class="at">.create</span>(<span class="wa">order_status: </span>order_status, <span class="wa">items: </span>order_form<span class="at">.items</span>, <span class="wa">user: </span>current_user)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    order <span class="op">=</span> <span class="dt">Order</span><span class="at">.create</span>(<span class="wa">order_status:</span> order_status, <span class="wa">items:</span> order_form<span class="at">.items</span>, <span class="wa">user:</span> current_user)</span>
 <span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a></span>
 <span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    <span class="kw">[</span><span class="wa">:ok</span>, order<span class="kw">]</span></span>
 <span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>  <span class="cf">end</span></span>
@@ -364,21 +365,21 @@ logic</li>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="cf">class</span> <span class="dt">CreditCardInc</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.pre_authed?</span>(credit_card, amount)</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    params <span class="kw">=</span> <span class="kw">{</span> <span class="st">&quot;no&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.cvv</span>, <span class="st">&quot;cost&quot;</span> <span class="kw">=&gt;</span> amount <span class="kw">}</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    response <span class="kw">=</span> conn<span class="at">.post</span>(<span class="st">&quot;https://example.com/credit_card/preauth&quot;</span>, <span class="wa">json: </span>params)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    params <span class="op">=</span> <span class="op">{</span> <span class="st">&quot;no&quot;</span> <span class="op">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="op">=&gt;</span> credit_card<span class="at">.cvv</span>, <span class="st">&quot;cost&quot;</span> <span class="op">=&gt;</span> amount <span class="op">}</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    response <span class="op">=</span> conn<span class="at">.post</span>(<span class="st">&quot;https://example.com/credit_card/preauth&quot;</span>, <span class="wa">json:</span> params)</span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    response<span class="at">.status</span> <span class="kw">==</span> <span class="dv">200</span> <span class="kw">&amp;&amp;</span> <span class="cn">JSON</span><span class="at">.parse</span>(response<span class="at">.body</span>)<span class="kw">[</span><span class="wa">:status</span><span class="kw">]</span> <span class="kw">==</span> <span class="st">&quot;ok&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    response<span class="at">.status</span> <span class="op">==</span> <span class="dv">200</span> <span class="op">&amp;&amp;</span> <span class="cn">JSON</span><span class="at">.parse</span>(response<span class="at">.body</span>)<span class="kw">[</span><span class="wa">:status</span><span class="kw">]</span> <span class="op">==</span> <span class="st">&quot;ok&quot;</span></span>
 <span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
 <span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.charge</span>(credit_card, user, amount)</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    params <span class="kw">=</span> <span class="kw">{</span> <span class="st">&quot;no&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="kw">=&gt;</span> credit_card<span class="at">.cvv</span>, <span class="st">&quot;postalCode&quot;</span> <span class="kw">=&gt;</span> user<span class="at">.postal_code</span>, <span class="st">&quot;cost&quot;</span> <span class="kw">=&gt;</span> amount <span class="kw">}</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    response <span class="kw">=</span> conn<span class="at">.post</span>(<span class="st">&quot;https://example.com/credit_card/charge&quot;</span>, <span class="wa">json: </span>params)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    params <span class="op">=</span> <span class="op">{</span> <span class="st">&quot;no&quot;</span> <span class="op">=&gt;</span> credit_card<span class="at">.number</span>, <span class="st">&quot;cvv&quot;</span> <span class="op">=&gt;</span> credit_card<span class="at">.cvv</span>, <span class="st">&quot;postalCode&quot;</span> <span class="op">=&gt;</span> user<span class="at">.postal_code</span>, <span class="st">&quot;cost&quot;</span> <span class="op">=&gt;</span> amount <span class="op">}</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    response <span class="op">=</span> conn<span class="at">.post</span>(<span class="st">&quot;https://example.com/credit_card/charge&quot;</span>, <span class="wa">json:</span> params)</span>
 <span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a></span>
 <span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="dt">Charge</span><span class="at">.from_api_response</span>(response)</span>
 <span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a></span>
 <span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.conn</span></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>    <span class="cn">HTTPX</span><span class="at">.with</span>(<span class="wa">headers: </span><span class="kw">{</span> <span class="st">&quot;authorization&quot;</span> <span class="kw">=&gt;</span> <span class="st">&quot;Bearer b7d03a6947b217efb6f3ec3bd3504582&quot;</span> <span class="kw">}</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>    <span class="cn">HTTPX</span><span class="at">.with</span>(<span class="wa">headers:</span> <span class="op">{</span> <span class="st">&quot;authorization&quot;</span> <span class="op">=&gt;</span> <span class="st">&quot;Bearer b7d03a6947b217efb6f3ec3bd3504582&quot;</span> <span class="op">}</span>)</span>
 <span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>  <span class="cf">end</span></span>
 <span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
 </div>
@@ -425,12 +426,12 @@ flow</p>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="cf">class</span> <span class="dt">AvailableItemsQuery</span></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="cf">def</span> <span class="dv">self</span><span class="at">.call</span>(item_ids, user)</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    available_items <span class="kw">=</span> <span class="dt">Item</span><span class="at">.join</span>(<span class="wa">:inventories</span>)<span class="at">.where</span>(<span class="wa">id: </span>item_ids)<span class="at">.where</span>(<span class="st">&quot;items.quantity &gt; 0&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    available_items <span class="op">=</span> <span class="dt">Item</span><span class="at">.join</span>(<span class="wa">:inventories</span>)<span class="at">.where</span>(<span class="wa">id:</span> item_ids)<span class="at">.where</span>(<span class="st">&quot;items.quantity &gt; 0&quot;</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="cf">return</span> available_items <span class="cf">unless</span> user<span class="at">.premium_subscriber?</span></span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="cf">if</span> available_items<span class="at">.count</span> <span class="kw">&lt;</span> item_ids<span class="at">.length</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>      <span class="dt">Item</span><span class="at">.where</span>(<span class="wa">id: </span>item_ids)<span class="at">.joins</span>(<span class="wa">:shipping_manifest</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="cf">if</span> available_items<span class="at">.count</span> <span class="op">&lt;</span> item_ids<span class="at">.length</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>      <span class="dt">Item</span><span class="at">.where</span>(<span class="wa">id:</span> item_ids)<span class="at">.joins</span>(<span class="wa">:shipping_manifest</span>)</span>
 <span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>          <span class="at">.where</span>(<span class="st">&quot;shipping_manifests.receive_date &lt; ?&quot;</span>, <span class="dv">2</span><span class="at">.weeks.from_now</span>)</span>
 <span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>    <span class="cf">else</span></span>
 <span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>      available_items</span>
@@ -481,7 +482,7 @@ table</p>
 <div class="slide section level3">
 
 <div class="float">
-<img src="snl-david-pumpkins.jpg" alt="Any Questions?" />
+<img src="img/snl-david-pumpkins.jpg" alt="Any Questions?" />
 <div class="figcaption">Any Questions?</div>
 </div>
 </div>
